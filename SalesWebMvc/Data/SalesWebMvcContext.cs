@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+
 using SalesWebMvc.Models;
 
 namespace SalesWebMvc.Data
@@ -14,6 +11,6 @@ namespace SalesWebMvc.Data
         {
         }
 
-        public DbSet<SalesWebMvc.Models.Departament> Departament { get; set; } = default!;
+        public DbSet<Department> Departament { get; set; } = default!;
     }
 }
