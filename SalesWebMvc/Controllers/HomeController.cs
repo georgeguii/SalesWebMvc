@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SalesWebMvc.Models;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using SalesWebMvc.Models.ViewModels;
 
 namespace SalesWebMvc.Controllers;
 public class HomeController : Controller
@@ -14,6 +14,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        ViewData["Email"] = "george.gui2000@gmail.com";
         return View();
     }
 
