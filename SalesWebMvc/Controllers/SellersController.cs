@@ -1,10 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SalesWebMvc.Services;
 
 namespace SalesWebMvc.Controllers;
 public class SellersController : Controller
 {
-    public IActionResult Index()
+    private readonly SellerService _sellerService;
+
+    public SellersController(SellerService sellerService)
     {
-        return View();
+        _sellerService = sellerService;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var list = await _sellerService.FindAll();
+        return View(list);
     }
 }

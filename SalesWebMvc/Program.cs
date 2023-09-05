@@ -1,5 +1,6 @@
-﻿using SalesWebMvc.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SalesWebMvc.Data;
+using SalesWebMvc.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContextPool<SalesWebMvcContext>(options =>
@@ -10,6 +11,7 @@ builder.Services.AddDbContextPool<SalesWebMvcContext>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<SeedingService>();
+builder.Services.AddScoped<SellerService>();
 
 var app = builder.Build();
 
