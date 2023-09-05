@@ -3,6 +3,7 @@ using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
 using SalesWebMvc.Services.Exceptions;
+using System.Diagnostics;
 
 namespace SalesWebMvc.Controllers;
 public class SellersController : Controller
@@ -43,13 +44,13 @@ public class SellersController : Controller
     {
         if (id == null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id not provided." });
         }
 
         var obj = await _sellerService.FindById(id.Value);
         if (obj == null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id not found." });
         }
 
         return View(obj);
@@ -59,13 +60,13 @@ public class SellersController : Controller
     {
         if (id == null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id not provided."});
         }
 
         var obj = await _sellerService.FindById(id.Value);
         if (obj == null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id not found." });
         }
 
         return View(obj);
@@ -84,13 +85,13 @@ public class SellersController : Controller
     {
         if (id == null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id not provided." });
         }
 
         var obj = await _sellerService.FindById(id.Value);
         if (obj == null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id not found." });
         }
 
         var departments = await _departmentService.FindAll();
@@ -108,25 +109,31 @@ public class SellersController : Controller
 
             if (id != seller.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "Id mismatch." });
             }
 
             await _sellerService.Update(seller);
 
             return RedirectToAction(nameof(Index));
         }
-        catch (NotFoundException ex)
+        catch (ApplicationException ex)
         {
-            return NotFound(new { details = ex.Message });
-        }
-        catch (DbConcurrencyException ex)
-        {
-            return BadRequest(new { details = ex.Message });
+            return RedirectToAction(nameof(Error), new { message = ex.Message });
         }
         catch (Exception ex)
         {
-            return BadRequest(new { details = ex.Message });
+            return RedirectToAction(nameof(Error), new { message = ex.Message });
         }
+    }
+
+    public IActionResult Error(string message)
+    {
+        var viewModel = new ErrorViewModel
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+            Message = message
+        };
+        return View(viewModel);
     }
 
 
