@@ -16,4 +16,11 @@ public class SellerService
     {
         return await _context.Seller.ToListAsync();
     }
+
+    public async Task Insert(Seller obj)
+    {
+        obj.Department = _context.Departament.First();
+        await _context.Seller.AddAsync(obj);
+        _context.SaveChanges();
+    }
 }
