@@ -19,7 +19,8 @@ public class SellerService
 
     public async Task<Seller> FindById(int id)
     {
-        return await _context.Seller.SingleOrDefaultAsync(s => s.Id == id) ?? throw new NullReferenceException($"Not found a seller with {id} id.");
+        return await _context.Seller.Include(s => s.Department).SingleOrDefaultAsync(s => s.Id == id) 
+            ?? throw new NullReferenceException($"Not found a seller with {id} id.");
     }
 
     public async Task Insert(Seller obj)
