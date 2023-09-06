@@ -13,35 +13,33 @@ public class SellerService
         _context = context;
     }
 
-    public async Task<List<Seller>> FindAll()
+    public async Task<List<Seller>> FindAllAsync()
     {
         return await _context.Seller.ToListAsync();
     }
 
-    public async Task<Seller> FindById(int id)
+    public async Task<Seller> FindByIdAsync(int id)
     {
         return await _context.Seller.Include(s => s.Department).SingleOrDefaultAsync(s => s.Id == id);
     }
 
-    public async Task Insert(Seller obj)
+    public async Task InsertAsync(Seller obj)
     {
         await _context.Seller.AddAsync(obj);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public async Task Remove(int id)
+    public async Task RemoveAsync(int id)
     {
-        var obj = await _context.Seller.SingleOrDefaultAsync(s => s.Id == id);
-        if (obj != null)
-        {
-            _context.Seller.Remove(obj);
-            await _context.SaveChangesAsync();
-        } 
+        var obj = await _context.Seller.FindAsync(id);
+        _context.Seller.Remove(obj);
+        await _context.SaveChangesAsync();
     }
 
-    public async Task Update(Seller obj)
+    public async Task UpdateAsync(Seller obj)
     {
-        if(!_context.Seller.Any(s => s.Id == obj.Id))
+        var hasAny = await _context.Seller.AnyAsync(s => s.Id == obj.Id);
+        if (!hasAny)
         {
             throw new NotFoundException("Id not found");
         }

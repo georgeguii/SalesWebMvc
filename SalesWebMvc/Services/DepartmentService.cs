@@ -14,7 +14,7 @@ public class DepartmentService
 
     }
 
-    public async Task<List<Department>> FindAll()
+    public async Task<List<Department>> FindAllAsync()
     {
         return await _context.Departament.OrderBy(d => d.Name).ToListAsync();
     }
