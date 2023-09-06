@@ -35,6 +35,12 @@ public class SellersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Seller seller)
     {
+        if (!ModelState.IsValid)
+        {
+            var departments = await _departmentService.FindAll();
+            var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+            return View(viewModel);
+        }
         await _sellerService.Insert(seller);
         return RedirectToAction(nameof(Index));
     }
@@ -106,6 +112,12 @@ public class SellersController : Controller
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                var departments = await _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments};
+                return View(viewModel);
+            }
 
             if (id != seller.Id)
             {
